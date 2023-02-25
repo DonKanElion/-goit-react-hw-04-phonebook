@@ -5,33 +5,62 @@ import { ContactForm } from 'components/ContactForm/ContactForm';
 import ContactList from './ContactList';
 import Filter from './Filter';
 
-const initContacts = {
-  contacts: [
-    { id: 'id-1', name: 'Rosie Simpson', number: '443-89-12' },
+const initContacts = [
+  { id: 'id-1', name: 'Rosie Simpson', number: '443-89-12' },
     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ],
-};
+]
+;
 
-const useLocaleStorage = (key, defaultValue) => {
-  const [state, setState] = useState(() => {
-    return JSON.parse(localStorage.getItem(key)) ?? initContacts;
-  });
-};
+// const useLocaleStorage = (key, defaultValue) => {
+//   const [state, setState] = useState(() => {
+//     return JSON.parse(localStorage.getItem(key)) ?? initContacts;
+//   });
+// };
+
 export function App() {
-  const [contacts, setContacts] = useLocaleStorage(contacts, []);
+  // const [contacts, setContacts] = useLocaleStorage(contacts, []);
+  const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
-  // state = {
-  //   contacts: [
-  //     { id: 'id-1', name: 'Rosie Simpson', number: '443-89-12' },
-  //     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  //     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-  //     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  //   ],
-  //   filter: '',
-  // };
+    // монтування === componentDidMount
+  useEffect(() => { 
+    console.log('Step 1. Перший рендер');
+    
+    // setContacts(JSON.parse(window.localStorage.getItem('contacts')) ?? initContacts);
+    setContacts(initContacts);
+
+  }, []);
+
+  // useEffect(() => {
+  //   // монтування === componentDidMount
+  //   console.log('Step 1. Перший рендер');
+  //   setContacts([JSON.parse(...localStorage.getItem('contacts'))] ?? [...initContacts]);
+  // }, []);
+
+  useEffect(() => {
+    const contactsFromLS = JSON.parse(localStorage.getItem('contacts'));
+    // const contactsFromLS = JSON.parse(window.localStorage.getItem('contacts'));
+
+
+    console.log(contactsFromLS)
+    // console.log('Before оновлення Локал: ', contactsFromLS);
+    // console.log('Step 2. Оновлення');
+
+    // // localStorage.setItem('contacts', JSON.stringify([contacts]));
+    // window.localStorage.setItem('contacts', JSON.stringify(contacts));
+
+    // console.log('After оновлення Локал: ', contactsFromLS);
+
+    if (contacts === contactsFromLS) {
+      return;
+    }
+    // ОНОВЛЕННЯ === componentDidUpdate
+    console.log('Step 2. Оновлення');
+    // window.localStorage.setItem('contacts', JSON.stringify(contacts));
+
+  }, [contacts]);
 
   // const componentDidMount  ()   {
   //   const myContacts = JSON.parse(localStorage.getItem('contacts'));
@@ -47,7 +76,7 @@ export function App() {
   //   }
   // }
 
-  const handleChange = evt => {  // ???????????? 
+  const handleChange = evt => {
     const { value } = evt.target;
     setFilter(value);
   };
@@ -58,16 +87,17 @@ export function App() {
       name,
       number,
     };
+     setContacts(prevState => ([newContact, ...contacts]))
+    console.log('Update Contacts + localStorige', contacts);
 
-    return setContacts(prevState => ({
-      contacts: [newContact, ...prevState.contacts],
-    }));
+    window.localStorage.setItem('contacts', JSON.stringify(contacts));
+    console.log('Update Contacts + localStorige', JSON.parse(window.localStorage.getItem('contacts')));
+
+    return;
   };
 
   const handleClick = id => {
-    setContacts(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
+    setContacts(prevState => (prevState.contacts.filter(contact => contact.id !== id)));
   };
 
   const findContact = () => {

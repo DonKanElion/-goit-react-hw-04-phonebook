@@ -6,36 +6,19 @@ import ContactList from './ContactList';
 import Filter from './Filter';
 
 const initContacts = [
-  { id: 'id-1', name: 'Rosie Simpson', number: '443-89-12' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+  { id: 'id-1', name: 'Bradley cooper', number: '443-89-12' },
+    { id: 'id-2', name: 'Elijah Jordan', number: '443-89-12' },
+    { id: 'id-3', name: 'Aaron Paul', number: '645-17-79' },
+    { id: 'id-4', name: ' Viggo Peter', number: '227-91-26' },
 ];
 
 export function App() {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
-
-    // монтування === componentDidMount
-  useEffect(() => { 
-    console.log('Step 1. Перший рендер');
-
-    const myContacts = JSON.parse(localStorage.getItem('contacts'));
-    if (myContacts) {
-      // this.setState({ contacts: myContacts });
-      return setContacts(myContacts);
-    };
-    return setContacts(initContacts);
-      
-  }, []);
+  const [contacts, setContacts] = useState(() => {
+    return JSON.parse(localStorage.getItem('contacts')) || initContacts});
+  const [filter, setFilter] = useState(''); 
 
   useEffect(() => {
-
     return window.localStorage.setItem('contacts', JSON.stringify(contacts));
-   
-    // console.log('Step 2. Оновлення locakStorage');
-    // console.log('LocalStor: ', window.localStorage.getItem('contacts'));
-
   }, [contacts]);
 
   const handleChange = evt => {
@@ -61,10 +44,8 @@ export function App() {
   };
 
   const findContact = () => {
-    const normalizedFilter = filter.toLowerCase();
-
     return contacts.filter(contact =>
-      contact.name.toLocaleLowerCase().includes(normalizedFilter)
+      contact.name.toLocaleLowerCase().includes(filter.toLowerCase())
     );
   };
 

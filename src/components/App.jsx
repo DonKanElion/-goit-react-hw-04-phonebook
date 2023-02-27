@@ -6,7 +6,7 @@ import ContactList from './ContactList';
 import Filter from './Filter';
 
 const initContacts = [
-  { id: 'id-1', name: 'Bradley cooper', number: '443-89-12' },
+  { id: 'id-1', name: 'Bradley Cooper', number: '443-89-12' },
     { id: 'id-2', name: 'Elijah Jordan', number: '443-89-12' },
     { id: 'id-3', name: 'Aaron Paul', number: '645-17-79' },
     { id: 'id-4', name: ' Viggo Peter', number: '227-91-26' },
